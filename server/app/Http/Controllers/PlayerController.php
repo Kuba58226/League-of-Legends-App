@@ -24,6 +24,7 @@ class PlayerController extends Controller
         }
 
         return response()->json([
+            'success' => true,
             'account' => $account,
             'accountDetails' => isset($accountDetails) ? $accountDetails : null,
             'playerDetails' => isset($playerDetails) ? $playerDetails : null,

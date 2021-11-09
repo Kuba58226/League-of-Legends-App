@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useContext, useEffect, useImperativeHandle, useState} from 'react'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -15,14 +15,13 @@ import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
+import {BrowserRouter as Router,useLocation,useParams} from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -90,6 +89,24 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  let params = useParams();
+  const {Website} = require('../config/website.js');
+
+  const [summonerName,setSummonerName] = useState('');
+
+  useEffect(()=>{
+    fetch(`${Website.serverName}api/player-data?gameName=${params.summonerName}`,{method: "GET", headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',},
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success == true) {
+            console.log(data);
+            setSummonerName(data.account.gameName)
+        }
+    })
+  },[])
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -177,7 +194,8 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={8} lg={12}>
+              {/* Chart */}
+              <Grid item xs={12} md={8} lg={3}>
                 <Paper
                   sx={{
                     p: 2,
@@ -186,8 +204,26 @@ function DashboardContent() {
                     height: 240,
                   }}
                 >
-                  <TextField id="summoner-name" label="Summoner Name" variant="outlined" />
-                  <Button variant="contained">Search</Button>
+                    <Typography variant="h5" component="h2">
+                        {summonerName}
+                    </Typography>
+                </Paper>
+              </Grid>
+              {/* Recent Deposits */}
+              <Grid item xs={12} md={4} lg={9}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 240,
+                  }}
+                >
+                </Paper>
+              </Grid>
+              {/* Recent Orders */}
+              <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                 </Paper>
               </Grid>
             </Grid>
@@ -199,6 +235,6 @@ function DashboardContent() {
   );
 }
 
-export default function Home() {
+export default function Summoner() {
   return <DashboardContent />;
 }
