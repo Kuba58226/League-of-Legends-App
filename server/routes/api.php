@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DataRefreshController;
+use App\Http\Controllers\PlayerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +34,4 @@ Route::group([
 });
 
 Route::post('/refresh', [DataRefreshController::class,'refresh']);
+Route::get('/player-data', [PlayerController::class,'getPlayerData']);

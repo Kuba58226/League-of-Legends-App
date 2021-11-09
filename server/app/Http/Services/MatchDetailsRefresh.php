@@ -29,6 +29,7 @@ class MatchDetailsRefresh
                 'match_details_id' => $matchDetails->id,
                 'participantId' => $participant->participantId
             ], [
+                'puuid' => $participant->puuid,
                 'summonerName' => $participant->summonerName,
                 'teamId' => $participant->teamId,
                 'win' => $participant->win,

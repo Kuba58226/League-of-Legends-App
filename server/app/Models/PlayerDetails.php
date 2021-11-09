@@ -12,6 +12,7 @@ class PlayerDetails extends Model
     protected $fillable = [
         'match_details_id',
         'participantId',
+        'puuid',
         'summonerName',
         'teamId',
         'win',

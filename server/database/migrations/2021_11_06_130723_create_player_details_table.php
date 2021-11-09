@@ -17,6 +17,7 @@ class CreatePlayerDetailsTable extends Migration
             $table->id();
             $table->foreignId('match_details_id')->constrained('match_details');
             $table->integer('participantId');
+            $table->string('puuid');
             $table->string('summonerName');
             $table->integer('teamId');
             $table->boolean('win');
