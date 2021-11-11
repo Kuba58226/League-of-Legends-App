@@ -23,6 +23,13 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import {BrowserRouter as Router,useLocation,useParams} from "react-router-dom";
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -92,12 +99,34 @@ function DashboardContent() {
   let params = useParams();
   const {Website} = require('../config/website.js');
 
+  const [championData,setChampionData] = useState([]);
   const [summonerName,setSummonerName] = useState('');
   const [profileImage,setProfileImage] = useState('');
   const [level,setLevel] = useState('');
   const [soloImage,setSoloImage] = useState('');
   const [flexImage,setFlexImage] = useState('');
   const [accountDetails,setAccountDetails] = useState([]);
+  const [playerDetails,setPlayerDetails] = useState([]);
+
+  useEffect(()=>{
+    fetch(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/data/en_US/championFull.json`,{method: "GET", headers: {
+      Accept: 'application/json'},
+    })
+    .then(response => response.json())
+    .then(data => {
+      setChampionData(data);
+    })
+  },[])
+
+  useEffect(()=>{
+    fetch(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/data/en_US/championFull.json`,{method: "GET", headers: {
+      Accept: 'application/json'},
+    })
+    .then(response => response.json())
+    .then(data => {
+      setChampionData(data);
+    })
+  },[])
 
   useEffect(()=>{
     fetch(`${Website.serverName}api/player-data?gameName=${params.summonerName}`,{method: "GET", headers: {
@@ -108,12 +137,14 @@ function DashboardContent() {
     .then(data => {
         if (data.success == true) {
             console.log(data);
+            console.log(data.playerDetails[0]);
             setSummonerName(data.account.gameName);
-            setProfileImage(`https://ddragon.leagueoflegends.com/cdn/11.22.1/img/profileicon/${data.accountDetails[0].profileIconId}.png`);
+            setProfileImage(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/profileicon/${data.accountDetails[0].profileIconId}.png`);
             setLevel(`Level: ${data.accountDetails[0].summonerLevel}`);
-            setSoloImage(`/images/ranked-emblems/Emblem_${data.accountDetails[0].solo_tier.toLowerCase().charAt(0).toUpperCase() + data.accountDetails[0].solo_tier.toLowerCase().slice(1)}.png`);
-            setFlexImage(`/images/ranked-emblems/Emblem_${data.accountDetails[0].flex_tier.toLowerCase().charAt(0).toUpperCase() + data.accountDetails[0].flex_tier.toLowerCase().slice(1)}.png`);
+            setSoloImage(`/images/ranked-emblems/Emblem_${data.accountDetails[0].solo_tier}.png`);
+            setFlexImage(`/images/ranked-emblems/Emblem_${data.accountDetails[0].flex_tier}.png`);
             setAccountDetails(data.accountDetails[0]);
+            setPlayerDetails(data.playerDetails);
         }
     })
   },[])
@@ -257,6 +288,34 @@ function DashboardContent() {
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                  {playerDetails.map((playerDetail) => (
+                    <TableContainer component={Paper}>
+                      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                        <TableHead>
+                          <TableRow style={{backgroundColor:'#ff0000'}}>
+                            <TableCell align="right">
+                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.keys[playerDetail.championId]}.png`} width='64px' height='64px'/>
+                              <img src={`/images/spells/${playerDetail.summoner1Id}.png`} width='32px' height='32px'/>
+                              <img src={`/images/spells/${playerDetail.summoner2Id}.png`} width='32px' height='32px'/>
+                              {championData.keys[playerDetail.championId]}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Typography>{playerDetail.kills}/{playerDetail.deaths}/{playerDetail.assists}</Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item0}.png`} width='32px' height='32px'/>
+                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item1}.png`} width='32px' height='32px'/>
+                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item2}.png`} width='32px' height='32px'/>
+                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item3}.png`} width='32px' height='32px'/>
+                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item4}.png`} width='32px' height='32px'/>
+                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item5}.png`} width='32px' height='32px'/>
+                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item6}.png`} width='32px' height='32px'/>
+                            </TableCell>
+                          </TableRow>
+                        </TableHead>
+                      </Table>
+                    </TableContainer>
+                  ))}
                 </Paper>
               </Grid>
             </Grid>
