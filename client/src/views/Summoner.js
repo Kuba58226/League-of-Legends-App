@@ -93,6 +93,11 @@ function DashboardContent() {
   const {Website} = require('../config/website.js');
 
   const [summonerName,setSummonerName] = useState('');
+  const [profileImage,setProfileImage] = useState('');
+  const [level,setLevel] = useState('');
+  const [soloImage,setSoloImage] = useState('');
+  const [flexImage,setFlexImage] = useState('');
+  const [accountDetails,setAccountDetails] = useState([]);
 
   useEffect(()=>{
     fetch(`${Website.serverName}api/player-data?gameName=${params.summonerName}`,{method: "GET", headers: {
@@ -103,7 +108,12 @@ function DashboardContent() {
     .then(data => {
         if (data.success == true) {
             console.log(data);
-            setSummonerName(data.account.gameName)
+            setSummonerName(data.account.gameName);
+            setProfileImage(`https://ddragon.leagueoflegends.com/cdn/11.22.1/img/profileicon/${data.accountDetails[0].profileIconId}.png`);
+            setLevel(`Level: ${data.accountDetails[0].summonerLevel}`);
+            setSoloImage(`/images/ranked-emblems/Emblem_${data.accountDetails[0].solo_tier.toLowerCase().charAt(0).toUpperCase() + data.accountDetails[0].solo_tier.toLowerCase().slice(1)}.png`);
+            setFlexImage(`/images/ranked-emblems/Emblem_${data.accountDetails[0].flex_tier.toLowerCase().charAt(0).toUpperCase() + data.accountDetails[0].flex_tier.toLowerCase().slice(1)}.png`);
+            setAccountDetails(data.accountDetails[0]);
         }
     })
   },[])
@@ -207,6 +217,10 @@ function DashboardContent() {
                     <Typography variant="h5" component="h2">
                         {summonerName}
                     </Typography>
+                    <img src={profileImage} width='128px' height='128px'/>
+                    <Typography variant="h5" component="h2">
+                        {level}
+                    </Typography>
                 </Paper>
               </Grid>
               {/* Recent Deposits */}
@@ -219,6 +233,25 @@ function DashboardContent() {
                     height: 240,
                   }}
                 >
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-evenly"
+                    alignItems="center"
+                  >
+                    <img src={soloImage} width='128px' height='146px'/>
+                    <div>
+                      <Typography>{accountDetails.solo_tier} {accountDetails.solo_rank}</Typography>
+                      <Typography>{accountDetails.solo_wins}W/{accountDetails.solo_losses}L</Typography>
+                      <Typography>{accountDetails.solo_leaguePoints} LP {Math.round(100*accountDetails.solo_wins/(parseInt(accountDetails.solo_wins)+parseInt(accountDetails.solo_losses)))}% Winrate</Typography>
+                    </div>
+                    <img src={flexImage} width='128px' height='146px'/>
+                    <div>
+                      <Typography>{accountDetails.flex_tier} {accountDetails.flex_rank}</Typography>
+                      <Typography>{accountDetails.flex_wins}W/{accountDetails.flex_losses}L</Typography>
+                      <Typography>{accountDetails.flex_leaguePoints} LP {Math.round(100*accountDetails.flex_wins/(parseInt(accountDetails.flex_wins)+parseInt(accountDetails.flex_losses)))}% Winrate</Typography>
+                    </div>
+                  </Grid>
                 </Paper>
               </Grid>
               {/* Recent Orders */}
