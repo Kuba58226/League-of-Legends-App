@@ -27,6 +27,7 @@ class DataRefreshController extends Controller
         }
 
         return response()->json([
+            'success' => true,
             'message' => 'Data refreshed succesfully',
         ], 201);
     }

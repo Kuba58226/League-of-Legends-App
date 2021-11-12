@@ -288,7 +288,7 @@ function DashboardContent() {
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  {playerDetails.map((playerDetail) => (
+                  {playerDetails.map((playerDetail, index) => (
                     <TableContainer component={Paper}>
                       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead>

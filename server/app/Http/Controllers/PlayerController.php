@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Account;
 use App\Models\AccountDetails;
-use App\Models\PlayerDetails;
-use App\Models\MatchDetails;
 
 class PlayerController extends Controller
 {
@@ -15,12 +14,15 @@ class PlayerController extends Controller
         $account = Account::where('gameName', $request->gameName)->get()->first();
         if ($account) {
             $accountDetails = AccountDetails::where('account_id', $account->getAttributes()['id'])->get();
-            $playerDetails = PlayerDetails::where('puuid', $account->getAttributes()['puuid'])->get();
-
+            $playerDetails = DB::table('player_details')
+                ->where('puuid', $account->getAttributes()['puuid'])
+                ->join('match_details', 'player_details.match_details_id', '=', 'match_details.id')
+                ->get();
             $ids = array_column($playerDetails->toArray(), 'match_details_id');
-            $matchDetails = MatchDetails::find($ids);
-
-            $matchHistory = PlayerDetails::whereIn('match_details_id', $ids)->get();
+            $matchHistory = DB::table('player_details')
+                ->whereIn('match_details_id', $ids)
+                ->join('match_details', 'player_details.match_details_id', '=', 'match_details.id')
+                ->get();
         }
 
         return response()->json([
@@ -28,7 +30,6 @@ class PlayerController extends Controller
             'account' => $account,
             'accountDetails' => isset($accountDetails) ? $accountDetails : null,
             'playerDetails' => isset($playerDetails) ? $playerDetails : null,
-            'matchDetails' => isset($matchDetails) ? $matchDetails : null,
             'matchHistory' => isset($matchHistory) ? $matchHistory : null,
         ], 201);
     }
