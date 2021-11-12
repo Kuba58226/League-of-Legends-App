@@ -100,13 +100,7 @@ function DashboardContent() {
   const {Website} = require('../config/website.js');
 
   const [championData,setChampionData] = useState([]);
-  const [summonerName,setSummonerName] = useState('');
-  const [profileImage,setProfileImage] = useState('');
-  const [level,setLevel] = useState('');
-  const [soloImage,setSoloImage] = useState('');
-  const [flexImage,setFlexImage] = useState('');
-  const [accountDetails,setAccountDetails] = useState([]);
-  const [playerDetails,setPlayerDetails] = useState([]);
+  const [tierList,setTierList] = useState([]);
 
   useEffect(()=>{
     fetch(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/data/en_US/championFull.json`,{method: "GET", headers: {
@@ -119,7 +113,7 @@ function DashboardContent() {
   },[])
 
   useEffect(()=>{
-    fetch(`${Website.serverName}api/player-data?gameName=${params.summonerName}`,{method: "GET", headers: {
+    fetch(`${Website.serverName}api/tier-list?gameType=MATCHED_GAME&gameMode=CLASSIC`,{method: "GET", headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',},
     })
@@ -127,14 +121,7 @@ function DashboardContent() {
     .then(data => {
         if (data.success == true) {
             console.log(data);
-            console.log(data.playerDetails[0]);
-            setSummonerName(data.account.gameName);
-            setProfileImage(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/profileicon/${data.accountDetails[0].profileIconId}.png`);
-            setLevel(`Level: ${data.accountDetails[0].summonerLevel}`);
-            setSoloImage(`/images/ranked-emblems/Emblem_${data.accountDetails[0].solo_tier}.png`);
-            setFlexImage(`/images/ranked-emblems/Emblem_${data.accountDetails[0].flex_tier}.png`);
-            setAccountDetails(data.accountDetails[0]);
-            setPlayerDetails(data.playerDetails);
+            setTierList(data.tierList);
         }
     })
   },[])
@@ -225,103 +212,61 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                    <Typography variant="h5" component="h2">
-                        {summonerName}
-                    </Typography>
-                    <img src={profileImage} width='128px' height='128px'/>
-                    <Typography variant="h5" component="h2">
-                        {level}
-                    </Typography>
-                </Paper>
-              </Grid>
               {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={9}>
+              <Grid item xs={12} md={4} lg={12}>
                 <Paper
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 240,
+                    height: 80,
                   }}
                 >
-                  <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-evenly"
-                    alignItems="center"
-                  >
-                    <img src={soloImage} width='128px' height='146px'/>
-                    <div>
-                      <Typography>{accountDetails.solo_tier} {accountDetails.solo_rank}</Typography>
-                      <Typography>{accountDetails.solo_wins}W/{accountDetails.solo_losses}L</Typography>
-                      <Typography>{accountDetails.solo_leaguePoints} LP {Math.round(100*accountDetails.solo_wins/(parseInt(accountDetails.solo_wins)+parseInt(accountDetails.solo_losses)))}% Winrate</Typography>
-                    </div>
-                    <img src={flexImage} width='128px' height='146px'/>
-                    <div>
-                      <Typography>{accountDetails.flex_tier} {accountDetails.flex_rank}</Typography>
-                      <Typography>{accountDetails.flex_wins}W/{accountDetails.flex_losses}L</Typography>
-                      <Typography>{accountDetails.flex_leaguePoints} LP {Math.round(100*accountDetails.flex_wins/(parseInt(accountDetails.flex_wins)+parseInt(accountDetails.flex_losses)))}% Winrate</Typography>
-                    </div>
-                  </Grid>
                 </Paper>
               </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  {playerDetails.map((playerDetail, index) => (
-                    <TableContainer component={Paper}>
-                      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                        <TableHead>
-                          <TableRow style={{backgroundColor: playerDetail.win ? 'lightblue' : 'lightpink' }}>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                    <TableHead>
+                        <TableRow>
                             <TableCell align="center">
-                              <Grid
-                                container
-                                direction="row"
-                                justifyContent="center"
-                                alignItems="center"
-                              >
-                                <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.keys[playerDetail.championId]}.png`} width='64px' height='64px'/>
-                                <Box>
-                                  <Grid
-                                  container
-                                  direction="column"
-                                  justifyContent="center"
-                                  alignItems="center"
-                                  >
-                                    <img src={`/images/spells/${playerDetail.summoner1Id}.png`} width='32px' height='32px'/>
-                                    <img src={`/images/spells/${playerDetail.summoner2Id}.png`} width='32px' height='32px'/>
-                                  </Grid>
-                                </Box>
-                                <Typography>{championData.keys[playerDetail.championId]}</Typography>
-                              </Grid>
+                                Champion
                             </TableCell>
                             <TableCell align="center">
-                              <Typography>{playerDetail.kills}/{playerDetail.deaths}/{playerDetail.assists}</Typography>
+                                Winrate
                             </TableCell>
-                            <TableCell align="right">
-                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item0}.png`} width='32px' height='32px'/>
-                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item1}.png`} width='32px' height='32px'/>
-                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item2}.png`} width='32px' height='32px'/>
-                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item3}.png`} width='32px' height='32px'/>
-                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item4}.png`} width='32px' height='32px'/>
-                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item5}.png`} width='32px' height='32px'/>
-                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${playerDetail.item6}.png`} width='32px' height='32px'/>
+                            <TableCell align="center">
+                                Games
                             </TableCell>
-                          </TableRow>
-                        </TableHead>
-                      </Table>
-                    </TableContainer>
-                  ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {tierList.map((tier, index) => (
+                            <TableRow>
+                                <TableCell align="center">
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                    >
+                                        <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.keys[tier.championId]}.png`} width='64px' height='64px'/>
+                                        <Typography>{championData.keys[tier.championId]}</Typography>
+                                    </Grid>
+                                </TableCell>
+                                <TableCell align="center">
+                                    <Typography>{Math.round(tier.winRate)}%</Typography>
+                                </TableCell>
+                                <TableCell align="center">
+                                <Typography>{Math.round(tier.games)}</Typography>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                    </Table>
+                </TableContainer>
                 </Paper>
               </Grid>
             </Grid>
@@ -333,6 +278,6 @@ function DashboardContent() {
   );
 }
 
-export default function Summoner() {
+export default function TierList() {
   return <DashboardContent />;
 }
