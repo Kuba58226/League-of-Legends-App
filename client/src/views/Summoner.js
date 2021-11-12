@@ -292,12 +292,28 @@ function DashboardContent() {
                     <TableContainer component={Paper}>
                       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead>
-                          <TableRow style={{backgroundColor:'#ff0000'}}>
+                          <TableRow style={{backgroundColor: playerDetail.win ? 'lightblue' : 'lightpink' }}>
                             <TableCell align="right">
-                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.keys[playerDetail.championId]}.png`} width='64px' height='64px'/>
-                              <img src={`/images/spells/${playerDetail.summoner1Id}.png`} width='32px' height='32px'/>
-                              <img src={`/images/spells/${playerDetail.summoner2Id}.png`} width='32px' height='32px'/>
-                              {championData.keys[playerDetail.championId]}
+                              <Grid
+                                container
+                                direction="row"
+                                justifyContent="center"
+                                alignItems="center"
+                              >
+                                <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.keys[playerDetail.championId]}.png`} width='64px' height='64px'/>
+                                <Box>
+                                  <Grid
+                                  container
+                                  direction="column"
+                                  justifyContent="center"
+                                  alignItems="center"
+                                  >
+                                    <img src={`/images/spells/${playerDetail.summoner1Id}.png`} width='32px' height='32px'/>
+                                    <img src={`/images/spells/${playerDetail.summoner2Id}.png`} width='32px' height='32px'/>
+                                  </Grid>
+                                </Box>
+                                {championData.keys[playerDetail.championId]}
+                              </Grid>
                             </TableCell>
                             <TableCell align="right">
                               <Typography>{playerDetail.kills}/{playerDetail.deaths}/{playerDetail.assists}</Typography>
