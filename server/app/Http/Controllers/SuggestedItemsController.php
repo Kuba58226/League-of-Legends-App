@@ -16,7 +16,7 @@ class SuggestedItemsController extends Controller
 
         foreach ($items as $item) {
             $suggestedItem = DB::table('player_details')
-                ->select($item,
+                ->select(DB::raw($item.' as item'),
                     DB::raw('100*SUM(win)/COUNT(win) as winRate'),
                     DB::raw('100*COUNT(win)/(SELECT Count(*) FROM player_details WHERE championId=1) as playRate'))
                 ->where('championId','=',$request->championId)
@@ -24,7 +24,9 @@ class SuggestedItemsController extends Controller
                 ->having('playRate','>',5)
                 ->limit(1)
                 ->get();
-            $suggestedItems[] = $suggestedItem;
+            if ($suggestedItem) {
+                $suggestedItems[] = $suggestedItem;
+            }
         }
 
         return response()->json([
