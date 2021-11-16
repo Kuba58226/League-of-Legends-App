@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DataRefreshController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\TierListController;
+use App\Http\Controllers\SuggestedItemsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,4 @@ Route::group([
 Route::post('/refresh', [DataRefreshController::class,'refresh']);
 Route::get('/player-data', [PlayerController::class,'getPlayerData']);
 Route::get('/tier-list', [TierListController::class,'getTierList']);
+Route::get('/suggested-items', [SuggestedItemsController::class,'getSuggestedItems']);
