@@ -100,20 +100,34 @@ function DashboardContent() {
   const {Website} = require('../config/website.js');
 
   const [championData,setChampionData] = useState([]);
+  const [suggestedItems,setSuggestedItems] = useState([]);
 
-  useEffect(()=>{
-    fetch(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/data/en_US/championFull.json`,{method: "GET", headers: {
+  useEffect(async()=>{
+    await fetch(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/data/en_US/championFull.json`,{method: "GET", headers: {
       Accept: 'application/json'},
     })
     .then(response => response.json())
     .then(data => {
-        setChampionData(...[data.data]);
+      setChampionData(data);
+      console.log(data.data)
     })
   },[])
 
   useEffect(()=>{
-    console.log(championData['Aatrox']);
-  },[])
+    if (championData && championData.data && championData.data[params.champion]) {
+      fetch(`${Website.serverName}api/suggested-items?championId=${championData.data[params.champion].key}`,{method: "GET", headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',},
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success == true) {
+            console.log(data);
+            setSuggestedItems(data.suggestedItems)
+          }
+      })
+    }
+  },[championData])
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -203,28 +217,29 @@ function DashboardContent() {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    {championData && championData.data ? <div><img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.data[params.champion].image.full}`} width='128px' height='128px'/>
+                    <Typography variant="h5" component="h2">
+                        {championData.data[params.champion].name}
+                    </Typography>
                     <Grid
                         container
                         direction="row"
                         justifyContent="center"
                         alignItems="center"
                     >
-                        <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData[params.champion].image.full}`} width='128px' height='128px'/>
-                        <Typography variant="h5" component="h2">
-                            {championData[params.champion].name}
-                        </Typography>
-                        <Grid
-                            container
-                            direction="row"
-                            justifyContent="center"
-                            alignItems="center"
-                        >
-                            <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/spell/${championData[params.champion].spells[0].id}.png`} width='64px' height='64px'/>
-                            <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/spell/${championData[params.champion].spells[1].id}.png`} width='64px' height='64px'/>
-                            <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/spell/${championData[params.champion].spells[2].id}.png`} width='64px' height='64px'/>
-                            <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/spell/${championData[params.champion].spells[3].id}.png`} width='64px' height='64px'/>
-                        </Grid>
-                    </Grid>
+                        <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/spell/${championData.data[params.champion].spells[0].id}.png`} width='64px' height='64px'/>
+                        <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/spell/${championData.data[params.champion].spells[1].id}.png`} width='64px' height='64px'/>
+                        <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/spell/${championData.data[params.champion].spells[2].id}.png`} width='64px' height='64px'/>
+                        <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/spell/${championData.data[params.champion].spells[3].id}.png`} width='64px' height='64px'/>
+                    </Grid></div>
+                    : "Loading"}
+                  </Grid>
                 </Paper>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -259,6 +274,28 @@ function DashboardContent() {
               </Grid>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                  <Typography>Suggested Items</Typography>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                  {suggestedItems.map((suggestedItem, index) => (
+                    <Box>
+                      <Grid
+                      container
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${suggestedItem[0]['item']}.png`} width='64px' height='64px'/>
+                      <a>Winrate: {Math.round(suggestedItem[0]['winRate'])}%</a>
+                      <a>Playrate: {Math.round(suggestedItem[0]['playRate'])}%</a>
+                    </Grid>
+                    </Box>
+                  ))}
+                  </Grid>
                 </Paper>
               </Grid>
             </Grid>
