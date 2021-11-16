@@ -5,6 +5,7 @@ import Home from './views/Home.js'
 import Summoner from './views/Summoner.js'
 import TierList from './views/TierList.js'
 import Champions from './views/Champions.js'
+import Champion from './views/Champion.js'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="summoner/:summonerName" element={<Summoner />}/>
         <Route path="tier-list/:gameType/:gameMode/:lane/:role" element={<TierList />}/>
         <Route path="champions" element={<Champions />}/>
+        <Route path="champion/:champion" element={<Champion />}/>
         <Route path="" element={<Home />}/>
       </Routes>
     </BrowserRouter>
