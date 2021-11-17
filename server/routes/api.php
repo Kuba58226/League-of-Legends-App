@@ -7,6 +7,7 @@ use App\Http\Controllers\DataRefreshController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\TierListController;
 use App\Http\Controllers\SuggestedItemsController;
+use App\Http\Controllers\MatchupsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +40,4 @@ Route::post('/refresh', [DataRefreshController::class,'refresh']);
 Route::get('/player-data', [PlayerController::class,'getPlayerData']);
 Route::get('/tier-list', [TierListController::class,'getTierList']);
 Route::get('/suggested-items', [SuggestedItemsController::class,'getSuggestedItems']);
+Route::get('/matchups', [MatchupsController::class,'getMatchups']);
