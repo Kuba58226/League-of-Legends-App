@@ -41,3 +41,4 @@ Route::get('/player-data', [PlayerController::class,'getPlayerData']);
 Route::get('/tier-list', [TierListController::class,'getTierList']);
 Route::get('/suggested-items', [SuggestedItemsController::class,'getSuggestedItems']);
 Route::get('/matchups', [MatchupsController::class,'getMatchups']);
+Route::get('/suggested-items-champions', [SuggestedItemsController::class,'getSuggestedItemsByChampion']);
