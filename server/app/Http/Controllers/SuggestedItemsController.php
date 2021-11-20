@@ -18,7 +18,7 @@ class SuggestedItemsController extends Controller
             $suggestedItem = DB::table('player_details')
                 ->select(DB::raw($item.' as item'),
                     DB::raw('100*SUM(win)/COUNT(win) as winRate'),
-                    DB::raw('100*COUNT(win)/(SELECT Count(*) FROM player_details WHERE championId=1) as playRate'))
+                    DB::raw('100*COUNT(win)/(SELECT Count(*) FROM player_details WHERE championId='.$request->championId.') as playRate'))
                 ->where('championId','=',$request->championId)
                 ->groupBy($item)
                 ->having('playRate','>',5)

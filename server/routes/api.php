@@ -8,6 +8,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\TierListController;
 use App\Http\Controllers\SuggestedItemsController;
 use App\Http\Controllers\MatchupsController;
+use App\Http\Controllers\ChampionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,3 +43,4 @@ Route::get('/tier-list', [TierListController::class,'getTierList']);
 Route::get('/suggested-items', [SuggestedItemsController::class,'getSuggestedItems']);
 Route::get('/matchups', [MatchupsController::class,'getMatchups']);
 Route::get('/suggested-items-champions', [SuggestedItemsController::class,'getSuggestedItemsByChampion']);
+Route::get('/champion', [ChampionController::class,'getChampionData']);
