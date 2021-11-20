@@ -101,6 +101,11 @@ function DashboardContent() {
 
   const [championData,setChampionData] = useState([]);
   const [suggestedItems,setSuggestedItems] = useState([]);
+  const [easiestMatchups,setEasiestMatchups] = useState([]);
+  const [hardestMatchups,setHardestMatchups] = useState([]);
+  const [winRate,setWinRate] = useState(0);
+  const [games,setGames] = useState(0);
+  const [playRate,setPlayRate] = useState(0);
 
   useEffect(async()=>{
     await fetch(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/data/en_US/championFull.json`,{method: "GET", headers: {
@@ -109,7 +114,6 @@ function DashboardContent() {
     .then(response => response.json())
     .then(data => {
       setChampionData(data);
-      console.log(data.data)
     })
   },[])
 
@@ -122,8 +126,40 @@ function DashboardContent() {
       .then(response => response.json())
       .then(data => {
           if (data.success == true) {
-            console.log(data);
             setSuggestedItems(data.suggestedItems)
+          }
+      })
+    }
+  },[championData])
+
+  useEffect(()=>{
+    if (championData && championData.data && championData.data[params.champion]) {
+      fetch(`${Website.serverName}api/matchups?championId=${championData.data[params.champion].key}`,{method: "GET", headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',},
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success == true) {
+            setEasiestMatchups(data['easiestMatchups'])
+            setHardestMatchups(data['hardestMatchups'])
+          }
+      })
+    }
+  },[championData])
+
+  useEffect(()=>{
+    if (championData && championData.data && championData.data[params.champion]) {
+      fetch(`${Website.serverName}api/champion?championId=${championData.data[params.champion].key}`,{method: "GET", headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',},
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success == true) {
+            setWinRate(data.champion[0].winRate)
+            setGames(data.champion[0].games)
+            setPlayRate(data.champion[0].playRate)
           }
       })
     }
@@ -245,20 +281,16 @@ function DashboardContent() {
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead>
                         <TableRow>
-                            <TableCell align="right">Calories</TableCell>
-                            <TableCell align="right">Calories</TableCell>
-                            <TableCell align="right">Fat</TableCell>
-                            <TableCell align="right">Carbs</TableCell>
-                            <TableCell align="right">Protein</TableCell>
+                            <TableCell align="center">WinRate</TableCell>
+                            <TableCell align="center">Popularity</TableCell>
+                            <TableCell align="center">Games</TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
                             <TableRow>
-                                <TableCell align="right">ddasds</TableCell>
-                                <TableCell align="right">ddasds</TableCell>
-                                <TableCell align="right">dsdasads</TableCell>
-                                <TableCell align="right">sdsdsadas</TableCell>
-                                <TableCell align="right">dffdssd</TableCell>
+                                <TableCell align="center">{Math.round(winRate * 10) / 10}%</TableCell>
+                                <TableCell align="center">{Math.round(playRate * 10) / 10}%</TableCell>
+                                <TableCell align="center">{games}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -266,10 +298,52 @@ function DashboardContent() {
               </Grid>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                  <Typography>Easiest Matchups</Typography>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-evenly"
+                    alignItems="center"
+                  >
+                    {Object.entries(easiestMatchups).map((easiestMatchup, index) => (
+                      <Box>
+                        <Grid
+                        container
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        >
+                          <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.keys[easiestMatchup[0]]}.png`} width='64px' height='64px'/>
+                          <a>Winrate: {Math.round(easiestMatchup[1] * 10) / 10}%</a>
+                        </Grid>
+                      </Box>
+                    ))}
+                  </Grid>
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Typography>Hardest Matchups</Typography>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-evenly"
+                    alignItems="center"
+                  >
+                    {Object.entries(hardestMatchups).map((hardestMatchup, index) => (
+                      <Box>
+                        <Grid
+                        container
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        >
+                          <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.keys[hardestMatchup[0]]}.png`} width='64px' height='64px'/>
+                          <a>Winrate: {Math.round(hardestMatchup[1] * 10) / 10}%</a>
+                        </Grid>
+                      </Box>
+                    ))}
+                  </Grid>
                 </Paper>
               </Grid>
               <Grid item xs={12}>
@@ -278,7 +352,7 @@ function DashboardContent() {
                   <Grid
                     container
                     direction="row"
-                    justifyContent="center"
+                    justifyContent="space-evenly"
                     alignItems="center"
                   >
                   {suggestedItems.map((suggestedItem, index) => (
@@ -290,8 +364,8 @@ function DashboardContent() {
                       alignItems="center"
                     >
                       <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/item/${suggestedItem[0]['item']}.png`} width='64px' height='64px'/>
-                      <a>Winrate: {Math.round(suggestedItem[0]['winRate'])}%</a>
-                      <a>Playrate: {Math.round(suggestedItem[0]['playRate'])}%</a>
+                      <a>Winrate: {Math.round(suggestedItem[0]['winRate'] * 10) / 10}%</a>
+                      <a>Playrate: {Math.round(suggestedItem[0]['playRate'] * 10) / 10}%</a>
                     </Grid>
                     </Box>
                   ))}

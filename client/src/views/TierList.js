@@ -22,6 +22,8 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import {BrowserRouter as Router,useLocation,useParams} from "react-router-dom";
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -113,17 +115,30 @@ function DashboardContent() {
   },[])
 
   useEffect(()=>{
-    fetch(`${Website.serverName}api/tier-list?gameType=MATCHED_GAME&gameMode=CLASSIC`,{method: "GET", headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',},
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success == true) {
-            console.log(data);
+    if (params.lane==='ALL' && params.role==='ALL') {
+      fetch(`${Website.serverName}api/tier-list?gameType=${params.gameType}&gameMode=${params.gameMode}`,{method: "GET", headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',},
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success == true) {
             setTierList(data.tierList);
-        }
-    })
+          }
+      })
+    }
+    else {
+      fetch(`${Website.serverName}api/tier-list?gameType=${params.gameType}&gameMode=${params.gameMode}&lane=${params.lane}&role=${params.role}`,{method: "GET", headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',},
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success == true) {
+            setTierList(data.tierList);
+          }
+      })
+    }
   },[])
 
   return (
@@ -222,6 +237,14 @@ function DashboardContent() {
                     height: 80,
                   }}
                 >
+                  <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                    <Button>All</Button>
+                    <Button><img src={`/images/position-emblems/Position_Top.png`} width='32px' height='32px'/></Button>
+                    <Button><img src={`/images/position-emblems/Position_Jungle.png`} width='32px' height='32px'/></Button>
+                    <Button><img src={`/images/position-emblems/Position_Mid.png`} width='32px' height='32px'/></Button>
+                    <Button><img src={`/images/position-emblems/Position_Bot.png`} width='32px' height='32px'/></Button>
+                    <Button><img src={`/images/position-emblems/Position_Support.png`} width='32px' height='32px'/></Button>
+                  </ButtonGroup>
                 </Paper>
               </Grid>
               {/* Recent Orders */}
@@ -232,13 +255,15 @@ function DashboardContent() {
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">
-                                Champion
                             </TableCell>
                             <TableCell align="center">
-                                Winrate
+                              Champion
                             </TableCell>
                             <TableCell align="center">
-                                Games
+                              Winrate
+                            </TableCell>
+                            <TableCell align="center">
+                              Games
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -246,15 +271,10 @@ function DashboardContent() {
                         {tierList.map((tier, index) => (
                             <TableRow>
                                 <TableCell align="center">
-                                    <Grid
-                                        container
-                                        direction="row"
-                                        justifyContent="center"
-                                        alignItems="center"
-                                    >
-                                        <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.keys[tier.championId]}.png`} width='64px' height='64px'/>
-                                        <Typography>{championData.keys[tier.championId]}</Typography>
-                                    </Grid>
+                                  <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${championData.keys[tier.championId]}.png`} width='64px' height='64px'/>
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Typography>{championData.data[championData.keys[tier.championId]].name}</Typography>
                                 </TableCell>
                                 <TableCell align="center">
                                     <Typography>{Math.round(tier.winRate)}%</Typography>
