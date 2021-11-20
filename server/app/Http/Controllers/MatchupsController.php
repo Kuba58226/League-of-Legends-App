@@ -61,7 +61,8 @@ class MatchupsController extends Controller
 
         return response()->json([
             'success' => true,
-            'matchups' => $matchups,
+            'easiestMatchups' => array_slice($matchups, 0, 5, true),
+            'hardestMatchups' => array_reverse(array_slice($matchups, -5, 5, true), true)
         ], 201);
     }
 }
