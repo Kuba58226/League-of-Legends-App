@@ -23,6 +23,7 @@ class SuggestedItemsController extends Controller
                 ->groupBy($item)
                 ->having('playRate','>',5)
                 ->limit(1)
+                ->orderByDesc('winRate')
                 ->get();
             if ($suggestedItem) {
                 $suggestedItems[] = $suggestedItem;

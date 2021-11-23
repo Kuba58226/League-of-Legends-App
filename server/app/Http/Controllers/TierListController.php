@@ -13,12 +13,14 @@ class TierListController extends Controller
             $tierList = DB::table('player_details')
                 ->select('championId',
                     DB::raw('100*SUM(player_details.win)/COUNT(player_details.win) as winRate'),
-                    DB::raw('COUNT(player_details.win) as games'))
+                    DB::raw('COUNT(player_details.win) as games'),
+                    DB::raw('1000*COUNT(*)/(SELECT COUNT(*) FROM player_details) as playRate'))
                 ->join('match_details', 'match_details.id', '=', 'player_details.match_details_id')
                 ->where('match_details.gameType','=',$request->gameType)
                 ->where('match_details.gameMode','=',$request->gameMode)
                 ->where('player_details.lane','=',$request->lane)
                 ->where('player_details.role','=',$request->role)
+                ->having('playRate','>',5)
                 ->groupBy('championId')
                 ->orderByDesc('winRate')
                 ->get();
@@ -27,10 +29,12 @@ class TierListController extends Controller
             $tierList = DB::table('player_details')
                 ->select('championId',
                     DB::raw('100*SUM(player_details.win)/COUNT(player_details.win) as winRate'),
-                    DB::raw('COUNT(player_details.win) as games'))
+                    DB::raw('COUNT(player_details.win) as games'),
+                    DB::raw('1000*COUNT(*)/(SELECT COUNT(*) FROM player_details) as playRate'))
                 ->join('match_details', 'match_details.id', '=', 'player_details.match_details_id')
                 ->where('match_details.gameType','=',$request->gameType)
                 ->where('match_details.gameMode','=',$request->gameMode)
+                ->having('playRate','>',5)
                 ->groupBy('championId')
                 ->orderByDesc('winRate')
                 ->get();
