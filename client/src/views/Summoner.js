@@ -22,6 +22,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import {BrowserRouter as Router,useLocation,useParams} from "react-router-dom";
+import Button from '@mui/material/Button';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -30,18 +31,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import SideBar from './../components/SideBar';
+import Copyright from './../components/Copyright';
 
 const drawerWidth = 240;
 
@@ -161,15 +152,17 @@ function DashboardContent() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              League of Legends App
-            </Typography>
+            <Link to='/' style={{ color: 'inherit', textDecoration: 'inherit'}}>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                sx={{ flexGrow: 1 }}
+              >
+                League of Legends App
+              </Typography>
+            </Link>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -185,30 +178,7 @@ function DashboardContent() {
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
-          <Divider />
-          <List>
-              <div>
-                <ListItem button>
-                    <ListItemIcon>
-                        <DashboardIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Live Game" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <BarChartIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Tier List" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <PeopleIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Champions" />
-                </ListItem>
-            </div>
-          </List>
-          <Divider />
+          <SideBar/>
         </Drawer>
         <Box
           component="main"
@@ -232,7 +202,7 @@ function DashboardContent() {
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 240,
+                    height: 260,
                   }}
                 >
                     <Typography variant="h5" component="h2">
@@ -242,6 +212,7 @@ function DashboardContent() {
                     <Typography variant="h5" component="h2">
                         {level}
                     </Typography>
+                    <Button variant="contained">Refresh</Button>
                 </Paper>
               </Grid>
               {/* Recent Deposits */}
@@ -251,7 +222,7 @@ function DashboardContent() {
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 240,
+                    height: 260,
                   }}
                 >
                   <Grid
@@ -302,8 +273,10 @@ function DashboardContent() {
                                     <img src={`/images/spells/${playerDetail.summoner2Id}.png`} width='32px' height='32px'/>
                                   </Grid>
                                 </Box>
-                                <Typography>{championData.keys[playerDetail.championId]}</Typography>
                               </Grid>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography>{championData.keys[playerDetail.championId]}</Typography>
                             </TableCell>
                             <TableCell align="center">
                               <Typography>{playerDetail.kills}/{playerDetail.deaths}/{playerDetail.assists}</Typography>

@@ -24,18 +24,8 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import SideBar from './../components/SideBar';
+import Copyright from './../components/Copyright';
 
 const drawerWidth = 240;
 
@@ -137,30 +127,7 @@ function DashboardContent() {
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
-          <Divider />
-          <List>
-              <div>
-                <ListItem button>
-                    <ListItemIcon>
-                        <DashboardIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Live Game" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <BarChartIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Tier List" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <PeopleIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Champions" />
-                </ListItem>
-            </div>
-          </List>
-          <Divider />
+          <SideBar/>
         </Drawer>
         <Box
           component="main"

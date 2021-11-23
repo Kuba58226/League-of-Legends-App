@@ -32,18 +32,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import SideBar from './../components/SideBar';
+import Copyright from './../components/Copyright';
 
 const drawerWidth = 240;
 
@@ -187,30 +177,7 @@ function DashboardContent() {
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
-          <Divider />
-          <List>
-              <div>
-                <ListItem button>
-                    <ListItemIcon>
-                        <DashboardIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Live Game" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <BarChartIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Tier List" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <PeopleIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Champions" />
-                </ListItem>
-            </div>
-          </List>
-          <Divider />
+          <SideBar/>
         </Drawer>
         <Box
           component="main"
@@ -238,12 +205,12 @@ function DashboardContent() {
                   }}
                 >
                   <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button>All</Button>
-                    <Button><img src={`/images/position-emblems/Position_Top.png`} width='32px' height='32px'/></Button>
-                    <Button><img src={`/images/position-emblems/Position_Jungle.png`} width='32px' height='32px'/></Button>
-                    <Button><img src={`/images/position-emblems/Position_Mid.png`} width='32px' height='32px'/></Button>
-                    <Button><img src={`/images/position-emblems/Position_Bot.png`} width='32px' height='32px'/></Button>
-                    <Button><img src={`/images/position-emblems/Position_Support.png`} width='32px' height='32px'/></Button>
+                    <Button variant="outlined">All</Button>
+                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Top.png`} width='32px' height='32px'/></Button>
+                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Jungle.png`} width='32px' height='32px'/></Button>
+                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Mid.png`} width='32px' height='32px'/></Button>
+                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Bot.png`} width='32px' height='32px'/></Button>
+                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Support.png`} width='32px' height='32px'/></Button>
                   </ButtonGroup>
                 </Paper>
               </Grid>
@@ -263,6 +230,9 @@ function DashboardContent() {
                               Winrate
                             </TableCell>
                             <TableCell align="center">
+                              Playrate
+                            </TableCell>
+                            <TableCell align="center">
                               Games
                             </TableCell>
                         </TableRow>
@@ -278,6 +248,9 @@ function DashboardContent() {
                                 </TableCell>
                                 <TableCell align="center">
                                     <Typography>{Math.round(tier.winRate)}%</Typography>
+                                </TableCell>
+                                <TableCell align="center">
+                                    <Typography>{Math.round(tier.playRate)}%</Typography>
                                 </TableCell>
                                 <TableCell align="center">
                                 <Typography>{Math.round(tier.games)}</Typography>
