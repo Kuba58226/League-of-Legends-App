@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@mui/material/ListItem';
@@ -21,7 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import {BrowserRouter as Router,useLocation,useParams} from "react-router-dom";
+import {BrowserRouter as Router,useLocation,useParams,Link} from "react-router-dom";
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
@@ -83,9 +82,13 @@ export default function SideBar() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              League of Legends App
+                <Link to='/' style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                    League of Legends App
+                </Link>
             </Typography>
-            <Button variant="contained">Login</Button>
+            <Link to='/login' style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                <Button variant="contained">Login</Button>
+            </Link>
           </Toolbar>
         </AppBar>
     )

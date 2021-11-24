@@ -71,7 +71,7 @@ export default function Register() {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: 'url(https://img.redbull.com/images/c_limit,w_1500,h_1000,f_auto,q_auto/redbullcom/2019/11/10/9dad23f6-2e82-45d8-a39c-232a7d2e611f/league-of-legends-world-championship-2019-finals-crowd)',
+              backgroundImage: 'url(https://img.redbull.com/images/c_limit,w_1500,h_1000,f_auto,q_auto/redbullcom/2019/10/10/34df1b13-b611-4ac2-8904-2624a9454f88/lol-worlds-2018)',
               backgroundRepeat: 'no-repeat',
               backgroundColor: (t) =>
                 t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
