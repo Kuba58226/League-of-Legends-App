@@ -2,6 +2,7 @@ import './App.css';
 import React, {useEffect, useImperativeHandle, useState} from 'react'
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import Login from './views/Login.js'
+import Register from './views/Register.js'
 import Home from './views/Home.js'
 import Summoner from './views/Summoner.js'
 import TierList from './views/TierList.js'
@@ -19,6 +20,7 @@ function App() {
       <AppContext.Provider value={{isUserLogged:loggedIn,toggleLoggedState:setLoggedIn,jwtToken:token,toggleTokenState:setToken,userRole:role,toggleRoleState:setAccountType}}>
         <Routes>
           <Route path="login" element={<Login />}/>
+          <Route path="register" element={<Register />}/>
           <Route path="summoner/:summonerName" element={<Summoner />}/>
           <Route path="tier-list/:gameType/:gameMode/:lane/:role" element={<TierList />}/>
           <Route path="champions" element={<Champions />}/>

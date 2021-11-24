@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useImperativeHandle, useState} from 'react'
-import {Navigate} from 'react-router-dom';
+import {Navigate,useNavigate} from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -19,12 +19,19 @@ import Copyright from './../components/Copyright';
 
 const theme = createTheme();
 
-export default function Login() {
+export default function Register() {
   const {Website} = require('../config/website.js');
   const {isUserLogged,toggleLoggedState,jwtToken,toggleTokenState,userRole,toggleRoleState} = useContext(AppContext)
+  const navigate = useNavigate();
 
+  const [name,setName] = useState("")
   const [email,setEmail] = useState("")
   const [password,setPassword] = useState("")
+  const [passwordConfirmation,setPasswordConfirmation] = useState("")
+
+  function handleOnChangeName(e){
+    setName(e.target.value)
+  }
 
   function handleOnChangeEmail(e){
     setEmail(e.target.value)
@@ -34,19 +41,21 @@ export default function Login() {
     setPassword(e.target.value)
   }
 
+  function handleOnChangePasswordConfirmation(e){
+    setPasswordConfirmation(e.target.value)
+  }
+
   function handleSubmit(e){
     e.preventDefault()
-    fetch(`${Website.serverName}api/auth/login`,{method: "POST", headers: {
+    fetch(`${Website.serverName}api/auth/register`,{method: "POST", headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'},
-    body: JSON.stringify({email: email, password: password})})
+    body: JSON.stringify({email: email, password: password, name: name, password_confirmation: passwordConfirmation})})
     .then(response => response.json())
     .then(data => {
-      console.log(data);
-      toggleLoggedState(true)
-      toggleTokenState(data.access_token)
-      toggleRoleState(data.user.role)
-      console.log(isUserLogged)
+        if (data.message === 'User successfully registered') {
+            navigate('/login')
+        }
     })
   }
 
@@ -84,9 +93,19 @@ export default function Login() {
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Sign in
+                Sign up
               </Typography>
               <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                <TextField onChange={handleOnChangeName}
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  name="name"
+                  autoComplete="name"
+                  autoFocus
+                />
                 <TextField onChange={handleOnChangeEmail}
                   margin="normal"
                   required
@@ -95,7 +114,6 @@ export default function Login() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  autoFocus
                 />
                 <TextField onChange={handleOnChangePassword}
                   margin="normal"
@@ -107,9 +125,15 @@ export default function Login() {
                   id="password"
                   autoComplete="current-password"
                 />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
+                <TextField onChange={handleOnChangePasswordConfirmation}
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password_confirmation"
+                  label="Confirm Password"
+                  type="password"
+                  id="password_confirmation"
+                  autoComplete="current-password-confirmation"
                 />
                 <Button
                   type="submit"
@@ -117,17 +141,12 @@ export default function Login() {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign in
+                  Sign up
                 </Button>
                 <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
+                        Forgot password?
                     </Link>
                   </Grid>
                 </Grid>
