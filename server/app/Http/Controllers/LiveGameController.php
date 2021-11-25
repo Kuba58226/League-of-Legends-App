@@ -24,9 +24,27 @@ class LiveGameController extends Controller
             ], 404);
         }
 
+        $summonerChampion = null;
+        $summonerTeam = null;
+        foreach($data->participants as $participant) {
+            if ($participant->summonerName === $request->gameName) {
+                $summonerChampion = $participant->championId;
+                $summonerTeam = $participant->teamId;
+            }
+        }
+
+        $summonerOpponents = [];
+        foreach($data->participants as $participant) {
+            if ($participant->teamId !== $summonerTeam) {
+                $summonerOpponents[] = $participant->championId;
+            }
+        }
+
         return response()->json([
             'success' => true,
             'liveGame' => $data,
+            'summonerChampion' => $summonerChampion,
+            'summonerOpponents' => $summonerOpponents
         ], 201);
     }
 }
