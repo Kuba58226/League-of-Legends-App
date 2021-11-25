@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@mui/material/ListItem';
@@ -21,7 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import {BrowserRouter as Router,useLocation,useParams} from "react-router-dom";
+import {BrowserRouter as Router,useLocation,useParams,Link} from "react-router-dom";
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -126,10 +125,14 @@ function DashboardContent() {
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                         {Array.from(Object.values(championData)).map((champion, index) => (
-                            <Grid item xs={2} sm={4} md={2} key={index}>
-                                <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${champions.keys[champion.key]}.png`} width='64px' height='64px'/>
-                                <Typography>{champion.name}</Typography>
-                            </Grid>
+                          <Grid item xs={2} sm={4} md={2} key={index}>
+                            <Link to={`/champion/${champions.keys[champion.key]}`} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                              <img src={`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/champion/${champions.keys[champion.key]}.png`} width='64px' height='64px'/>
+                            </Link>
+                            <Link to={`/champion/${champions.keys[champion.key]}`} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                              <Typography>{champion.name}</Typography>
+                            </Link>
+                          </Grid>
                         ))}
                     </Grid>
                 </Paper>

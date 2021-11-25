@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@mui/material/ListItem';
@@ -21,7 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import {BrowserRouter as Router,useLocation,useParams} from "react-router-dom";
+import {BrowserRouter as Router,useLocation,useParams,Link} from "react-router-dom";
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
@@ -112,7 +111,7 @@ function DashboardContent() {
           }
       })
     }
-  },[])
+  },[params.gameType, params.gameMode, params.lane, params.role])
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -160,12 +159,36 @@ function DashboardContent() {
                   }}
                 >
                   <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button variant="outlined">All</Button>
-                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Top.png`} width='32px' height='32px'/></Button>
-                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Jungle.png`} width='32px' height='32px'/></Button>
-                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Mid.png`} width='32px' height='32px'/></Button>
-                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Bot.png`} width='32px' height='32px'/></Button>
-                    <Button variant="outlined"><img src={`/images/position-emblems/Position_Support.png`} width='32px' height='32px'/></Button>
+                    <Button variant="outlined">
+                      <Link to={`/tier-list/MATCHED_GAME/CLASSIC/ALL/ALL`} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                        All
+                      </Link>
+                    </Button>
+                    <Button variant="outlined">
+                      <Link to={`/tier-list/MATCHED_GAME/CLASSIC/TOP/SOLO`} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                        <img src={`/images/position-emblems/Position_Top.png`} width='32px' height='32px'/>
+                      </Link>
+                    </Button>
+                    <Button variant="outlined">
+                      <Link to={`/tier-list/MATCHED_GAME/CLASSIC/JUNGLE/NONE`} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                        <img src={`/images/position-emblems/Position_Jungle.png`} width='32px' height='32px'/>
+                      </Link>
+                    </Button>
+                    <Button variant="outlined">
+                      <Link to={`/tier-list/MATCHED_GAME/CLASSIC/MIDDLE/SOLO`} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                        <img src={`/images/position-emblems/Position_Mid.png`} width='32px' height='32px'/>
+                      </Link>
+                    </Button>
+                    <Button variant="outlined">
+                      <Link to={`/tier-list/MATCHED_GAME/CLASSIC/BOTTOM/CARRY`} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                        <img src={`/images/position-emblems/Position_Bot.png`} width='32px' height='32px'/>
+                      </Link>
+                    </Button>
+                    <Button variant="outlined">
+                      <Link to={`/tier-list/MATCHED_GAME/CLASSIC/BOTTOM/SUPPORT`} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                        <img src={`/images/position-emblems/Position_Support.png`} width='32px' height='32px'/>
+                      </Link>
+                    </Button>
                   </ButtonGroup>
                 </Paper>
               </Grid>

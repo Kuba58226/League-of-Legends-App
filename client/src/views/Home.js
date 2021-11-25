@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, {useContext, useEffect, useImperativeHandle, useState} from 'react'
+import {Navigate,useNavigate} from 'react-router-dom';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -64,6 +65,18 @@ function DashboardContent() {
     setOpen(!open);
   };
 
+  const navigate = useNavigate();
+  const [summonerName,setSummonerName] = useState('');
+
+  function handleOnChangeSummonerName(e){
+    setSummonerName(e.target.value)
+  }
+
+  const toggleSearch = () => {
+    console.log(summonerName);
+    navigate(`/summoner/${summonerName}`)
+  };
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -108,8 +121,8 @@ function DashboardContent() {
                     height: 240,
                   }}
                 >
-                  <TextField id="summoner-name" label="Summoner Name" variant="outlined" />
-                  <Button variant="contained">Search</Button>
+                  <TextField id="summoner-name" label="Summoner Name" variant="outlined" onChange={handleOnChangeSummonerName} />
+                  <Button variant="contained" onClick={toggleSearch}>Search</Button>
                 </Paper>
               </Grid>
             </Grid>
