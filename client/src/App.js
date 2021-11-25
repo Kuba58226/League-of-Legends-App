@@ -8,6 +8,7 @@ import Summoner from './views/Summoner.js'
 import TierList from './views/TierList.js'
 import Champions from './views/Champions.js'
 import Champion from './views/Champion.js'
+import LiveGame from './views/LiveGame.js'
 import {contextObject,AppContext} from './AppContext';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="tier-list/:gameType/:gameMode/:lane/:role" element={<TierList />}/>
           <Route path="champions" element={<Champions />}/>
           <Route path="champion/:champion" element={<Champion />}/>
+          <Route path="live-game/:summonerName" element={<LiveGame />}/>
           <Route path="" element={<Home />}/>
         </Routes>
       </AppContext.Provider>
