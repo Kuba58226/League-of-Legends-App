@@ -9,6 +9,7 @@ use App\Http\Controllers\TierListController;
 use App\Http\Controllers\SuggestedItemsController;
 use App\Http\Controllers\MatchupsController;
 use App\Http\Controllers\ChampionController;
+use App\Http\Controllers\LiveGameController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,3 +45,4 @@ Route::get('/suggested-items', [SuggestedItemsController::class,'getSuggestedIte
 Route::get('/matchups', [MatchupsController::class,'getMatchups']);
 Route::get('/suggested-items-champions', [SuggestedItemsController::class,'getSuggestedItemsByChampion']);
 Route::get('/champion', [ChampionController::class,'getChampionData']);
+Route::get('/live-game', [LiveGameController::class,'getLiveGame']);
