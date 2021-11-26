@@ -9,6 +9,8 @@ use App\Models\AccountDetails;
 
 class PlayerController extends Controller
 {
+    const GAMES_LIMIT = 20;
+
     public function getPlayerData(Request $request)
     {
         $account = Account::where('gameName', $request->gameName)->get()->first();
@@ -17,6 +19,8 @@ class PlayerController extends Controller
             $playerDetails = DB::table('player_details')
                 ->where('puuid', $account->getAttributes()['puuid'])
                 ->join('match_details', 'player_details.match_details_id', '=', 'match_details.id')
+                ->orderByDesc('match_details.gameCreation')
+                ->limit($this::GAMES_LIMIT)
                 ->get();
             $ids = array_column($playerDetails->toArray(), 'match_details_id');
             $matchHistory = DB::table('player_details')
