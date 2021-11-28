@@ -10,6 +10,8 @@ use App\Http\Controllers\SuggestedItemsController;
 use App\Http\Controllers\MatchupsController;
 use App\Http\Controllers\ChampionController;
 use App\Http\Controllers\LiveGameController;
+use App\Http\Controllers\FriendsController;
+use App\Http\Controllers\UserAccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,3 +48,9 @@ Route::get('/matchups', [MatchupsController::class,'getMatchups']);
 Route::get('/suggested-items-champions', [SuggestedItemsController::class,'getSuggestedItemsByChampion']);
 Route::get('/champion', [ChampionController::class,'getChampionData']);
 Route::get('/live-game', [LiveGameController::class,'getLiveGame']);
+
+Route::get('/get-friends', [FriendsController::class,'getFriendsByUser']);
+Route::post('/add-friend', [FriendsController::class,'addFriend']);
+
+Route::get('/get-user-account', [UserAccountController::class,'getUserAccount']);
+Route::post('/set-user-account', [UserAccountController::class,'setUserAccount']);
