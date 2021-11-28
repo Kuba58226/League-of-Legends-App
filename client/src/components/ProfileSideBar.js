@@ -16,29 +16,13 @@ export default function SideBar() {
             <Divider />
                 <List>
                     <div>
-                        <Link to='/search-live-game' style={{ color: 'inherit', textDecoration: 'inherit'}}>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <DashboardIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Live Game" />
-                        </ListItem>
-                        </Link>
-                        <Link to='/tier-list/MATCHED_GAME/CLASSIC/ALL/ALL' style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                        <Link to='/profile-friends' style={{ color: 'inherit', textDecoration: 'inherit'}}>
                         <ListItem button>
                             <ListItemIcon>
                                 <BarChartIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Tier List" />
+                            <ListItemText primary="Friends" />
                         </ListItem>
-                        </Link>
-                        <Link to='/champions' style={{ color: 'inherit', textDecoration: 'inherit'}}>
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <PeopleIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Champions" />
-                            </ListItem>
                         </Link>
                     </div>
                 </List>

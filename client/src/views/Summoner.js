@@ -21,7 +21,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import {BrowserRouter as Router,useLocation,useParams} from "react-router-dom";
+import {BrowserRouter as Router,useLocation,useParams,Navigate,useNavigate} from "react-router-dom";
 import Button from '@mui/material/Button';
 
 import Table from '@mui/material/Table';
@@ -71,16 +71,33 @@ function DashboardContent() {
     setOpen(!open);
   };
   let params = useParams();
+  const navigate = useNavigate();
   const {Website} = require('../config/website.js');
 
   const [championData,setChampionData] = useState([]);
   const [summonerName,setSummonerName] = useState('');
+  const [region,setRegion] = useState('EUNE');
   const [profileImage,setProfileImage] = useState('');
   const [level,setLevel] = useState('');
   const [soloImage,setSoloImage] = useState('');
   const [flexImage,setFlexImage] = useState('');
   const [accountDetails,setAccountDetails] = useState([]);
   const [playerDetails,setPlayerDetails] = useState([]);
+
+  const toggleRefresh = () => {
+    fetch(`${Website.serverName}api/refresh`,{method: "POST", headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'},
+    body: JSON.stringify({gameName: summonerName, region: region})})
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      if (data.success === true) {
+        console.log('success')
+        navigate(`/summoner/${summonerName}`)
+      }
+    })
+  };
 
   useEffect(()=>{
     fetch(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/data/en_US/championFull.json`,{method: "GET", headers: {
@@ -99,9 +116,8 @@ function DashboardContent() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success == true) {
+        if (data.success == true && data.account !== null) {
             console.log(data);
-            console.log(data.playerDetails[0]);
             setSummonerName(data.account.gameName);
             setProfileImage(`https://ddragon.leagueoflegends.com/cdn/${Website.lolVersion}/img/profileicon/${data.accountDetails[0].profileIconId}.png`);
             setLevel(`Level: ${data.accountDetails[0].summonerLevel}`);
@@ -165,7 +181,7 @@ function DashboardContent() {
                     <Typography variant="h5" component="h2">
                         {level}
                     </Typography>
-                    <Button variant="contained">Refresh</Button>
+                    <Button variant="contained" onClick={toggleRefresh}>Refresh</Button>
                 </Paper>
               </Grid>
               {/* Recent Deposits */}

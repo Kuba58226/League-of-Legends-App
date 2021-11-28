@@ -24,6 +24,8 @@ import {BrowserRouter as Router,useLocation,useParams,Link} from "react-router-d
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
+import {AppContext} from '../AppContext';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -56,6 +58,8 @@ export default function SideBar() {
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
+    const {isUserLogged,toggleLoggedState,jwtToken,toggleTokenState,userRole,toggleRoleState} = useContext(AppContext)
     return (
         <AppBar position="absolute" open={open}>
           <Toolbar
@@ -86,9 +90,18 @@ export default function SideBar() {
                     League of Legends App
                 </Link>
             </Typography>
+            {userRole==='admin' &&
+            <Link to='/admin' style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                <Button variant="contained">Admin Panel</Button>
+            </Link>}
+            {isUserLogged &&
+            <Link to='/profile' style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                <Button variant="contained">Profile</Button>
+            </Link>}
+            {!isUserLogged &&
             <Link to='/login' style={{ color: 'inherit', textDecoration: 'inherit'}}>
                 <Button variant="contained">Login</Button>
-            </Link>
+            </Link>}
           </Toolbar>
         </AppBar>
     )
