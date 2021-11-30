@@ -11,6 +11,8 @@ import Champion from './views/Champion.js'
 import LiveGame from './views/LiveGame.js'
 import Profile from './views/Profile.js'
 import ProfileFriends from './views/ProfileFriends.js'
+import Admin from './views/Admin.js'
+import AdminUsers from './views/AdminUsers.js'
 import SearchLiveGame from './views/SearchLiveGame.js'
 import {contextObject,AppContext} from './AppContext';
 
@@ -33,6 +35,8 @@ function App() {
           <Route path="profile" element={<Profile />}/>
           <Route path="profile-friends" element={<ProfileFriends />}/>
           <Route path="search-live-game" element={<SearchLiveGame />}/>
+          <Route path="admin" element={<Admin />}/>
+          <Route path="admin-users" element={<AdminUsers />}/>
           <Route path="" element={<Home />}/>
         </Routes>
       </AppContext.Provider>
