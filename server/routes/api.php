@@ -12,6 +12,7 @@ use App\Http\Controllers\ChampionController;
 use App\Http\Controllers\LiveGameController;
 use App\Http\Controllers\FriendsController;
 use App\Http\Controllers\UserAccountController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,3 +55,5 @@ Route::post('/add-friend', [FriendsController::class,'addFriend']);
 
 Route::get('/get-user-account', [UserAccountController::class,'getUserAccount']);
 Route::post('/set-user-account', [UserAccountController::class,'setUserAccount']);
+
+Route::get('/get-users', [AdminController::class,'getUsers']);
